@@ -1,0 +1,64 @@
+! Command: show running-config
+! device: sw3 (vEOS-lab, EOS-4.27.3F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+username ansible privilege 15 secret sha512 $6$LHGOTMXlbeOSyW/F$CTyH3/BSv013PRiTwd011GKesDIzqIEgdxU6r49STCLHS25SefcLp.7zIWXNfC/pvJxel3sDHEYW.0sjp5I8i1
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+logging buffered 1000
+logging console informational
+logging monitor informational
+logging synchronous level all
+!
+hostname sw3
+!
+spanning-tree mode mstp
+!
+vlan 30,40
+!
+interface Ethernet1
+   switchport access vlan 30
+!
+interface Ethernet2
+   switchport access vlan 40
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback0
+   ip address 3.3.3.3/32
+!
+interface Management1
+   ip address 192.168.22.193/24
+!
+interface Vlan30
+   ip address 30.30.30.2/24
+!
+interface Vlan40
+   ip address 40.40.40.1/24
+!
+ip routing
+!
+ip route 0.0.0.0/0 192.168.22.1
+!
+router ospf 1
+   network 30.30.30.2/32 area 0.0.0.10
+   network 40.40.40.1/32 area 0.0.0.10
+   max-lsa 12000
+!
+end

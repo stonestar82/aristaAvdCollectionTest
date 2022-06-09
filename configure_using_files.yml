@@ -1,0 +1,32 @@
+---
+- name: Make sure the required directory exists
+  hosts: localhost
+  gather_facts: false
+  
+  tasks:
+    - name: Make sure the required directory exists
+      file:
+        path: "{{ save_dir }}/outputs/conf_generated/"
+        state: directory
+      check_mode: no
+
+- name: configure EOS devices 
+  hosts: eos
+  connection: httpapi
+  gather_facts: false
+  
+  tasks:
+    - name: generate EOS configuration from a template
+      template:
+        src: "{{ save_dir }}/templates/config.j2"
+        dest: "{{ save_dir }}/outputs/conf_generated/{{ hostname }}.cfg"
+        trim_blocks: yes
+      check_mode: no
+
+    - name: configure EOS devices 
+      eos_config:
+        src: "{{ save_dir }}/outputs/conf_generated/{{ hostname }}.cfg"
+        diff_against: session
+        backup: no
+        backup_options:
+          dir_path: "{{ save_dir }}/backup"

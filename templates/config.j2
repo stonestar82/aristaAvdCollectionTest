@@ -1,0 +1,42 @@
+hostname {{ hostname }}
+
+{# defualt setting #}
+ip routing
+logging buffered 1000
+logging console informational
+logging monitor informational
+logging synchronous level all
+
+{# vlan #}
+{% for item in interface_vlan %} 
+interface {{ item.interface }}
+    ip address {{ item. ip }}/{{ item.subnet }}
+{% endfor %}
+
+{# ethernet #}
+{% if interface_ethernet is defined %}  
+  {% for item in interface_ethernet %} 
+interface {{ item.interface }}
+    ip address {{ item. ip }}/{{ item.subnet }}
+    {% if item.switchport is defined %}
+    no switchport
+    {% endif %}
+  {% endfor %}
+{% endif%}
+
+{# loopback #}
+{% if loopback is defined %}
+interface Loopback0
+    ip address {{ loopback }}/32
+{% endif %}
+
+{# ospf #}
+{% if ospf is defined %}  
+router ospf 1
+  {% if ospf_default_infomation is defined %}
+  default-information {{ ospf_default_infomation }}
+  {% endif%}
+  {% for item in ospf_network %}
+  network {{ item.ip }}/32 area {{ item.area }}
+  {% endfor%}
+{% endif %}

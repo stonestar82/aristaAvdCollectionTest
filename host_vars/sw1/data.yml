@@ -1,0 +1,30 @@
+---
+hostname: sw1
+loopback: 1.1.1.1
+interface_vlan:
+  - interface: Vlan10
+    ip: 10.10.10.1
+    subnet: 24    
+  - interface: Vlan20
+    ip: 20.20.20.1
+    subnet: 24
+interface_ethernet:
+  - interface: Ethernet3
+    ip: 100.100.100.2
+    subnet: 24
+    switchport: no
+
+ospf: 1
+ospf_default_infomation: originate always
+ospf_network:
+  - ip: 10.10.10.1
+    area: 0
+  - ip: 20.20.20.1
+    area: 0
+
+## ansible manual 대로 작성, vlan 활성화한다. 
+vlans: 
+  - vlan_id: 10
+    state: active
+  - vlan_id: 20 
+    state: active

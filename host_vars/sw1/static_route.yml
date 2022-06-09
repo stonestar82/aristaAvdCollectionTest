@@ -1,0 +1,12 @@
+static_route:
+  - name: configure static route
+    eos_static_route:
+      address: 0.0.0.0/0
+      next_hop: 100.100.100.1
+      admin_distance: 1
+      state: present
+  - name: delete static route
+    eos_static_route:
+      address: 0.0.0.0/0
+      next_hop: 192.168.22.1
+      state: absent

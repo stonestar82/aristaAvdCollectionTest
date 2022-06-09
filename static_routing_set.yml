@@ -1,0 +1,13 @@
+---
+- name: static ip route delete ans create
+  hosts: eos
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:  
+    
+    - name: static ip route delete ans create
+      eos_static_route:
+        onfig: "{{ static_route }}"        
+      when: (static_route is defined)
+ 
